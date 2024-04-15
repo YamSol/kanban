@@ -1,0 +1,4 @@
+The file is without the node_modules package folder due to its size;
+I recommend installing the dependencies, npm install,
+npm install @heroicons/react,
+npm install react-beautiful-dnd;
