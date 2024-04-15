@@ -1,0 +1,62 @@
+[
+    {
+        "name":"A fazer",
+        "items": [
+            {
+                "id":1,
+                "priority": 0,
+                "title": "Comprar pão"             
+            },
+            {
+                "id":2,
+                "priority": 2,
+                "title": "Organizar o css"
+            }
+        ]
+    },
+    {
+        "name":"Em Progresso",
+        "items": [
+            {
+                "id":3,
+                "priority": 1,
+                "title": "O kanban"
+            }
+        ]
+    },
+    {
+        "name":"Em revisão",
+        "items": [
+            {
+                "id":4,
+                "priority": 2,
+                "title": "Documentação"
+            },
+            {
+                "id":5,
+                "priority": 2,
+                "title": "Comentar index"
+            }
+        ]
+    },
+    {
+        "name":"Completo",
+        "items": [
+            {
+                "id":6,
+                "priority": 0,
+                "title": "Fazer a coluna"
+            },
+            {
+                "id":7,
+                "priority": 0,
+                "title": "Arrumar a porta"
+            },
+            {
+                "id":8,
+                "priority": 0,
+                "title": "Cortar a grama"
+            }
+        ]
+    }
+]
