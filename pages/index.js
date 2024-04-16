@@ -6,11 +6,12 @@ import {
   PlusCircleIcon,
   XCircleIcon,
 } from "@heroicons/react/outline";
-import CardItem from "../components/CardItem";
-import BoardData from "../data/board-data.json";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { useEffect, useState } from "react";
+import CardItem from "../components/CardItem"; // Componente de item de cartão
+import BoardData from "../data/board-data.json"; // Dados do quadro de exemplo
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"; // Importações para manipulação de arrastar e soltar
+import { useEffect, useState } from "react"; // Hooks do React para efeitos e estado
 
+// Função para gerar um ID único
 function createGuidId() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -18,7 +19,9 @@ function createGuidId() {
   });
 }
 
+// Componente principal Home
 export default function Home() {
+  // Estado do componente
   const [ready, setReady] = useState(false);
   const [boardData, setBoardData] = useState(BoardData);
   const [showForm, setShowForm] = useState(false);
@@ -26,12 +29,14 @@ export default function Home() {
   const [showRemoveForm, setShowRemoveForm] = useState(false);
   const [selectedRemoveBoard, setSelectedRemoveBoard] = useState(0);
 
+  // Efeito para definir ready como true quando o componente é montado no navegador
   useEffect(() => {
-    if (process.browser) {
+    if (typeof window !== 'undefined')  {
       setReady(true);
     }
   }, []);
 
+  // Função chamada quando uma tarefa é arrastada e solta
   const onDragEnd = (re) => {
     if (!re.destination) return;
     let newBoardData = boardData;
@@ -49,6 +54,7 @@ export default function Home() {
     setBoardData(newBoardData);
   };
 
+  // Função chamada quando uma tecla é pressionada no textarea
   const onTextAreaKeyPress = (e) => {
     if(e.keyCode === 13) 
     {
@@ -75,6 +81,7 @@ export default function Home() {
     }
   }
 
+  // Função para remover uma tarefa
   const removeTask = (boardIndex, taskIndex) => {
     let newBoardData = [...boardData];
     newBoardData[boardIndex].items.splice(taskIndex, 1);
@@ -85,7 +92,7 @@ export default function Home() {
   return (
     <Layout>
       <div className="p-10 flex flex-col h-screen">
-        {/* Board header */}
+        {/* Cabeçalho do quadro de tarefas */}
         <div className="flex flex-initial justify-between">
           <div className="flex items-center">
             <h4 className="text-4xl font-bold text-gray-600">Quadro de Tarefas</h4>
@@ -96,7 +103,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Board columns */}
+        {/* Colunas do quadro */}
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
             <div className="grid grid-cols-4 gap-5 my-5">
@@ -178,6 +185,7 @@ export default function Home() {
           </DragDropContext>
         )}
       </div>
+      {/* Formulário de confirmação de remoção de tarefa */}
       {showRemoveForm && (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75">
           <div className="bg-white p-5 rounded-md shadow-md">
