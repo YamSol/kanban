@@ -67,10 +67,10 @@ export default function Home() {
         const item = {
           id: createGuidId(),
           title: val,
-          priority: 0,
           chat:0,
           attachment: 0,
-          assignees: []
+          assignees: [],
+          createdAt: new Date().toISOString()
         }
         let newBoardData = boardData;
         newBoardData[boardId].items.push(item);

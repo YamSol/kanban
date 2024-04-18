@@ -27,27 +27,10 @@ const CardItem = ({ data, index }) => {
           {...provided.dragHandleProps}
           className="bg-white rounded-md p-3 m-3 mt-0 last:mb-0" 
         >
-          {/* Etiqueta para exibir a prioridade do item. */}
-          <label
-            className={`bg-gradient-to-r
-              px-2 py-1 rounded text-white text-sm
-              ${
-                data.priority === 0
-                  ? "from-blue-600 to-blue-400"
-                  : data.priority === 1
-                  ? "from-green-600 to-green-400"
-                  : "from-red-600 to-red-400"
-              }
-              `}
-          >
-            {data.priority === 0
-              ? "Prioridade Baixa"
-              : data.priority === 1
-              ? "Prioridade Média"
-              : "Prioridade Alta"}
-          </label>
+
           {/* Título do item. */}
           <h5 className="text-md my-3 text-lg leading-6">{data.title}</h5>
+          <p className="text-sm text-gray-500">Criado em: {new Date(data.createdAt).toLocaleString()}</p>
           <div className="flex justify-between">
             <div className="flex space-x-2 items-center">
               {/* Ícones para chat e anexos (comentados) */}
