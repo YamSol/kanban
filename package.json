@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "dotenv": "^16.4.5",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.0.2",
