@@ -1,17 +1,13 @@
-import Layout from "../components/Layout";
-import {
-  ChevronDownIcon,
-  PlusIcon,
-  DotsVerticalIcon,
-  PlusCircleIcon,
-  XCircleIcon,
-} from "@heroicons/react/outline";
+// Importações dos componentes e pacotes necessários.
+import Layout from "../components/Layout"; // Componente de layout.
+import { ChevronDownIcon, PlusCircleIcon, XCircleIcon, DotsVerticalIcon } from "@heroicons/react/outline"; // Ícones importados do pacote HeroIcons.
 import CardItem from "../components/CardItem"; // Componente de item de cartão.
 import BoardData from "../data/board-data.json"; // Dados do quadro de exemplo.
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"; // Importações para manipulação de arrastar e soltar.
+import { DragDropContext, Droppable } from "react-beautiful-dnd"; // Importações para manipulação de arrastar e soltar.
 import { useEffect, useState } from "react"; // Hooks do React para efeitos e estado.
+import { useWindowSize } from '@react-hook/window-size'; // Importe o hook useWindowSize fornecido pelo pacote.
 
-// Função para gerar um ID único.
+// Função para gerar um ID único para os cartões.
 function createGuidId() {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
     var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -22,12 +18,23 @@ function createGuidId() {
 // Componente principal Home.
 export default function Home() {
   // Estado do componente.
-  const [ready, setReady] = useState(false);
-  const [boardData, setBoardData] = useState(BoardData);
-  const [showForm, setShowForm] = useState(false);
-  const [selectedBoard, setSelectedBoard] = useState(0);
-  const [showRemoveForm, setShowRemoveForm] = useState(false);
-  const [selectedRemoveBoard, setSelectedRemoveBoard] = useState(0);
+  const [ready, setReady] = useState(false); // Estado para controlar se o componente está pronto.
+  const [boardData, setBoardData] = useState(BoardData); // Estado para armazenar os dados do quadro.
+  const [showForm, setShowForm] = useState(false); // Estado para controlar a exibição do formulário.
+  const [selectedBoard, setSelectedBoard] = useState(0); // Estado para armazenar o índice do quadro selecionado.
+  const [showRemoveForm, setShowRemoveForm] = useState(false); // Estado para controlar a exibição do formulário de remoção.
+  const [selectedRemoveBoard, setSelectedRemoveBoard] = useState(0); // Estado para armazenar o índice do quadro selecionado para remoção.
+  
+  // Estados para armazenar as dimensões da janela.
+  const [windowWidth, setWindowWidth] = useState(0);
+  const [windowHeight, setWindowHeight] = useState(0);
+  const [currentWindowWidth, currentWindowHeight] = useWindowSize(); // Hook useWindowSize para obter as dimensões da janela.
+
+  // Efeito para atualizar as dimensões da janela quando o tamanho muda.
+  useEffect(() => {
+    setWindowWidth(currentWindowWidth);
+    setWindowHeight(currentWindowHeight);
+  }, [currentWindowWidth, currentWindowHeight]);
 
   // Efeito para definir ready como true quando o componente é montado no navegador.
   useEffect(() => {
@@ -67,9 +74,6 @@ export default function Home() {
         const item = {
           id: createGuidId(),
           title: val,
-          chat:0,
-          attachment: 0,
-          assignees: [],
           createdAt: new Date().toISOString()
         }
         let newBoardData = boardData;
@@ -89,67 +93,46 @@ export default function Home() {
     setShowRemoveForm(false);
   };
 
+  // Renderização do componente.
   return (
     <Layout>
-      <div className="p-10 flex flex-col h-screen">
+      <div className="p-5 md:p-20 flex flex-col flex-1">
         {/* Cabeçalho do quadro de tarefas. */}
-        <div className="flex flex-initial justify-between">
+        <div className="flex justify-center items-center">
           <div className="flex items-center">
             <h4 className="text-4xl font-bold text-gray-600">Quadro de Tarefas</h4>
-            <ChevronDownIcon
-              className="w-9 h-9 text-gray-500 rounded-full
-            p-1 bg-white ml-5 shadow-xl"
-            />
+            <ChevronDownIcon className="w-9 h-9 text-gray-500 rounded-full p-1 bg-white ml-5 shadow-xl" />
           </div>
         </div>
 
         {/* Colunas do quadro. */}
         {ready && (
           <DragDropContext onDragEnd={onDragEnd}>
-            <div className="grid grid-cols-4 gap-5 my-5">
+            {/* Adicionando a classe condicionalmente para a rolagem horizontal */}
+            <div className={`grid grid-cols-1 md:grid-cols-4 gap-5 my-5 ${windowWidth < 640 ? 'overflow-x-auto' : ''}`}>
               {boardData.map((board, bIndex) => {
                 return (
                   <div key={board.name}>
                     <Droppable droppableId={bIndex.toString()}>
                       {(provided, snapshot) => (
-                        <div
-                          {...provided.droppableProps}
-                          ref={provided.innerRef}
-                        >
-                          <div
-                            className={`bg-gray-100 rounded-md shadow-md
-                            flex flex-col relative overflow-hidden
-                            ${snapshot.isDraggingOver && "bg-green-100"}`}
-                          >
-                            <span
-                              className="w-full h-1 bg-gradient-to-r from-pink-700 to-red-200
-                          absolute inset-x-0 top-0"
-                            ></span>
+                        <div {...provided.droppableProps} ref={provided.innerRef}>
+                          <div className={`bg-gray-100 rounded-md shadow-md flex flex-col relative overflow-hidden ${snapshot.isDraggingOver && "bg-green-100"}`}>
+                            <span className="w-full h-1 bg-gradient-to-r from-pink-700 to-red-200 absolute inset-x-0 top-0"></span>
                             <h4 className=" p-3 flex justify-between items-center mb-2">
-                              <span className="text-2xl text-gray-600">
-                                {board.name}
-                              </span>
+                              <span className="text-2xl text-gray-600">{board.name}</span>
                               <DotsVerticalIcon className="w-5 h-5 text-gray-500" />
                             </h4>
 
-                            <div className="overflow-y-auto overflow-x-hidden h-auto"
-                            style={{maxHeight:'calc(100vh - 290px)'}}>
+                            <div className="overflow-y-auto overflow-x-hidden h-auto" style={{maxHeight:'calc(100vh - 290px)'}}>
                               {board.items.length > 0 &&
                                 board.items.map((item, iIndex) => {
                                   return (
                                     <div key={item.id} className="flex justify-between items-center m-3">
-                                      <CardItem
-                                        data={item}
-                                        index={iIndex}
-                                        className="mr-2"
-                                      />
-                                      <button
-                                        className="text-red-500"
-                                        onClick={() => {
+                                      <CardItem data={item} index={iIndex} className="mr-2" />
+                                      <button className="text-red-500" onClick={() => {
                                           setShowRemoveForm(true);
                                           setSelectedRemoveBoard(bIndex);
-                                        }}
-                                      >
+                                        }}>
                                         <XCircleIcon className="w-5 h-5" />
                                       </button>
                                     </div>
@@ -158,18 +141,13 @@ export default function Home() {
                               {provided.placeholder}
                             </div>
                             
+                            {/* Formulário para adicionar tarefa. */}
                             {showForm && selectedBoard === bIndex ? (
                               <div className="p-3">
-                                <textarea className="border-gray-300 rounded focus:ring-purple-400 w-full" 
-                                rows={3} placeholder="" 
-                                data-id={bIndex}
-                                onKeyDown={(e) => onTextAreaKeyPress(e)}/>
+                                <textarea className="border-gray-300 rounded focus:ring-purple-400 w-full" rows={3} placeholder="" data-id={bIndex} onKeyDown={(e) => onTextAreaKeyPress(e)}/>
                               </div>
                             ) : (
-                              <button
-                                className="flex justify-center items-center my-3 space-x-2 text-lg"
-                                onClick={() => {setSelectedBoard(bIndex); setShowForm(true);}}
-                              >
+                              <button className="flex justify-center items-center my-3 space-x-2 text-lg" onClick={() => {setSelectedBoard(bIndex); setShowForm(true);}}>
                                 <span>Adicionar Tarefa</span>
                                 <PlusCircleIcon className="w-5 h-5 text-gray-500" />
                               </button>
@@ -185,24 +163,17 @@ export default function Home() {
           </DragDropContext>
         )}
       </div>
-      {/* Formulário de confirmação de remoção de tarefa. */}
+
+      {/* Formulário de confirmação para remover tarefa. */}
       {showRemoveForm && (
         <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-75">
           <div className="bg-white p-5 rounded-md shadow-md">
             <p>Tem certeza de que deseja remover esta tarefa?</p>
             <div className="flex justify-end mt-3">
-              <button
-                className="px-4 py-2 bg-red-500 text-white rounded-md mr-3"
-                onClick={() => {
-                  removeTask(selectedRemoveBoard);
-                }}
-              >
+              <button className="px-4 py-2 bg-red-500 text-white rounded-md mr-3" onClick={() => {removeTask(selectedRemoveBoard);}}>
                 Remover
               </button>
-              <button
-                className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md"
-                onClick={() => setShowRemoveForm(false)}
-              >
+              <button className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md" onClick={() => setShowRemoveForm(false)}>
                 Cancelar
               </button>
             </div>
