@@ -13,7 +13,7 @@ function SideBar(props) {
         <div className="absolute inset-y-0 left-0 bg-blue-100">
             <div className="relative">
                 {/* Botão que abre o menu dropdown */}
-                <button className="flex items-center justify-center text-2xl h-16 bg-red-500 text-white font-bold w-40" onClick={handleMenuToggle}>
+                <button className="flex items-center justify-center text-2xl h-16 bg-red-400 text-white font-bold w-40" onClick={handleMenuToggle}>
                 <MenuIcon className="w-7 h-7 text-white"/>
                     Menu
                 </button>
