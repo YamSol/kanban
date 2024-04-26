@@ -3,7 +3,7 @@ import {SearchIcon, AtSymbolIcon, BellIcon} from '@heroicons/react/outline';
 
 function TopBar(props) {
     return (
-        <div className="h-16 pl-40 fixed bg-gradient-to-r from-red-500
+        <div className="h-16 pl-40 flex bg-gradient-to-r from-red-500
         to-red-300 w-full flex items-center justify-between pr-5">
             <div className="flex px-5 items-center">
                 <SearchIcon className="w-5 h-5 text-white"/>
