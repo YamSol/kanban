@@ -10,7 +10,10 @@ router.get(
     TarefasController.getAll
 )
 
-router.post('/tarefas', TarefasController.createBodyValidator, TarefasController.create);
-
+router.post(
+    '/tarefas', 
+    TarefasController.createValidation,
+    TarefasController.create
+);
 
 export { router };
