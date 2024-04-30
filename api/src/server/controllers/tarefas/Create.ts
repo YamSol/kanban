@@ -4,9 +4,10 @@ import { validation } from "../../shared/middleware";
 
 export const createValidation = validation({
     body: yup.object().shape({
-        titulo: yup.string().required(),
-        data: yup.date().required(),
-        id: yup.number().integer().required(),
+        id: yup.number().required().integer(),
+        type: yup.number().required().integer(),
+        title: yup.string().required(),
+        createdAt: yup.date().required(),
     }),
 });
 

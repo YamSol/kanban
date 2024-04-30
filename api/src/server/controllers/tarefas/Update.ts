@@ -14,6 +14,9 @@ export const updateValidation = validation({
         data: yup.date().notRequired(),
         id: yup.number().notRequired().integer(),
     }),
+    params: yup.object().shape({
+        id: yup.number().integer().required(),
+    })
 });
 
 export const update: RequestHandler = async (req, res) => {

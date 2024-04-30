@@ -7,19 +7,19 @@ const router = Router();
 router.get("/tarefas", TarefasController.getAll);
 
 router.post(
-    "/create",
+    "/tarefas",
     TarefasController.createValidation,
     TarefasController.create
 );
 
 router.delete(
-    "/tarefa",
+    "/tarefas/:id",
     TarefasController.deleteValidation,
     TarefasController.Delete
 );
 
 router.put(
-    "/tarefa",
+    "/tarefas/:id",
     TarefasController.updateValidation,
     TarefasController.update
 );

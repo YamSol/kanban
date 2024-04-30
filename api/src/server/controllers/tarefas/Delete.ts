@@ -3,9 +3,7 @@ import { validation } from "../../shared/middleware";
 import * as yup from "yup";
 
 export const deleteValidation = validation({
-    body: yup.object().shape({
-        titulo: yup.string(),
-        data: yup.date(),
+    params: yup.object().shape({
         id: yup.number().integer(),
     }),
 });
