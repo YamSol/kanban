@@ -31,7 +31,7 @@ export const validation: TValidation = (schemas) => async (req, res, next) => {
 
     if (Object.entries(errorsResult).length == 0) {
         // PASS
-        return next;
+        return next();
     } else {
         // FAILED
         return res.status(StatusCodes.BAD_REQUEST).json({ errors: errorsResult });

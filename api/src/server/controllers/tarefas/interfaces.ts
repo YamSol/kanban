@@ -1,7 +1,7 @@
 
 export interface ITarefa {
-    id: Number;
-    type: Number;
+    id: number;
+    type: number;
     title: string;
     createdAt: Date;
 }
