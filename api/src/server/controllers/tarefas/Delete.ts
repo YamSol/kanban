@@ -2,12 +2,6 @@ import { RequestHandler } from "express";
 import { validation } from "../../shared/middleware";
 import * as yup from "yup";
 
-interface ITarefa {
-    titulo: String;
-    data: Date;
-    id: Number;
-}
-
 export const deleteValidation = validation({
     body: yup.object().shape({
         titulo: yup.string(),
