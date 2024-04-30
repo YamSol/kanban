@@ -1,6 +1,6 @@
 import { RequestHandler } from "express";
-import { validation } from "../../shared/middleware";
 import * as yup from "yup";
+import { validation } from "../../shared/middleware";
 
 export const createValidation = validation({
     body: yup.object().shape({

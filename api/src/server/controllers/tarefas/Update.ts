@@ -12,7 +12,7 @@ export const updateValidation = validation({
     body: yup.object().shape({
         titulo: yup.string().notRequired(),
         data: yup.date().notRequired(),
-        id: yup.number().integer().notRequired(),
+        id: yup.number().notRequired().integer(),
     }),
 });
 

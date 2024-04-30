@@ -30,11 +30,10 @@ export const validation: TValidation = (schemas) => async (req, res, next) => {
     });
 
     if (Object.entries(errorsResult).length == 0) {
-        console.log('PASSED');
-        
+        // PASS
         return next;
     } else {
-        console.log('NOT PASSED');
+        // FAILED
         return res.status(StatusCodes.BAD_REQUEST).json({ errors: errorsResult });
     }
 };
