@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
+import * as tarefas from '../../../../data/tarefas.json';
 
 
 export const getAll: RequestHandler = (req, res) => {
-    const j = require("../../../../data/board-data.json");
-    res.json(j);
+    return res.json(tarefas);
 };
