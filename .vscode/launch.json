@@ -1,0 +1,20 @@
+{
+    "configurations": [
+        {
+            "name": "ts-node",
+            "type": "node",
+            "request": "launch",
+            "args": [
+                "${workspaceRoot}/api/src/index.ts"  
+            ],
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register",
+                // "--resolveJsonModule"
+            ],
+            "cwd": "${workspaceRoot}/api",  
+            // "protocol": "inspector",
+            "internalConsoleOptions": "openOnSessionStart"
+        }
+    ]
+}
