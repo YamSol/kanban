@@ -6,6 +6,12 @@ const router = Router();
 
 router.get("/tarefas", TarefasController.getAll);
 
+router.get(
+    "/tarefas/:id", 
+    TarefasController.getOneValidation, 
+    TarefasController.getOne
+);
+
 router.post(
     "/tarefas",
     TarefasController.createValidation,
