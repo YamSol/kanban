@@ -1,4 +1,3 @@
-
 export interface ITarefa {
     id: number;
     type: number;

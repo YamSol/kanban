@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import * as yup from "yup";
 import { validation } from "../../shared/middleware";
+import { StatusCodes } from "http-status-codes";
 
 export const createValidation = validation({
     body: yup.object().shape({
@@ -12,5 +13,8 @@ export const createValidation = validation({
 });
 
 export const create: RequestHandler = async (req, res) => {
-    return res.send("Created!");
+    // console.table(typeof(req.body.title));
+
+    // buscar no db o que foi inserido
+    return res.status(StatusCodes.CREATED).json(req.body); // retornar o que estiver no db
 };

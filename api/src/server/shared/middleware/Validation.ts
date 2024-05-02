@@ -2,12 +2,11 @@ import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
 import { Schema, ValidationError } from "yup";
 
-type TProperty = 'body' | 'header' | 'params' | 'query'
+type TProperty = "body" | "header" | "params" | "query";
 
 type TAllSchemas = Record<TProperty, Schema<any>>;
 
 type TValidation = (schemas: Partial<TAllSchemas>) => RequestHandler;
-
 
 export const validation: TValidation = (schemas) => async (req, res, next) => {
     const errorsResult: Record<string, Record<string, string>> = {};
@@ -19,7 +18,7 @@ export const validation: TValidation = (schemas) => async (req, res, next) => {
             const yupError = error as ValidationError;
             const errors: Record<string, string> = {};
 
-            yupError.inner.forEach(error => {
+            yupError.inner.forEach((error) => {
                 if (!error.path) return;
 
                 errors[error.path] = error.message;
@@ -34,6 +33,8 @@ export const validation: TValidation = (schemas) => async (req, res, next) => {
         return next();
     } else {
         // FAILED
-        return res.status(StatusCodes.BAD_REQUEST).json({ errors: errorsResult });
+        return res
+            .status(StatusCodes.BAD_REQUEST)
+            .json({ errors: errorsResult });
     }
 };
