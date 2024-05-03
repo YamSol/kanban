@@ -1,13 +1,13 @@
 import * as create from './Create';
-import * as getAll from './getAll';
-import * as getOne from './getOne';
-import * as Delete from './Delete';
-import * as update from './Update';
+import * as getAll from './GetAll';
+import * as getById from './GetById';
+import * as deleteById from './DeleteById';
+import * as update from './UpdateById';
 
 export const TarefasController = {
-  ...create,
   ...getAll,
-  ...getOne,
-  ...Delete,
+  ...getById,
+  ...create,
   ...update,
+  ...deleteById,
 };

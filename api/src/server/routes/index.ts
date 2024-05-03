@@ -5,29 +5,25 @@ import { TarefasController } from '../controllers/tasks';
 const router = Router();
 
 router.get('/tarefas', TarefasController.getAll);
-
 router.get(
   '/tarefas/:id',
-  TarefasController.getOneValidation,
-  TarefasController.getOne,
+  TarefasController.getByIdValidation,
+  TarefasController.getById,
 );
-
 router.post(
   '/tarefas',
   TarefasController.createValidation,
   TarefasController.create,
 );
-
 router.delete(
   '/tarefas/:id',
-  TarefasController.deleteValidation,
-  TarefasController.Delete,
+  TarefasController.deleteById,
+  TarefasController.deleteByIdValidation,
 );
-
 router.put(
   '/tarefas/:id',
-  TarefasController.updateValidation,
-  TarefasController.update,
+  TarefasController.updateByIdValidation,
+  TarefasController.updateById,
 );
 
 export { router };
