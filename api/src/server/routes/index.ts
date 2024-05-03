@@ -1,33 +1,33 @@
-import { Router } from "express";
+import { Router } from 'express';
 
-import { TarefasController } from "../controllers/tasks";
+import { TarefasController } from '../controllers/tasks';
 
 const router = Router();
 
-router.get("/tarefas", TarefasController.getAll);
+router.get('/tarefas', TarefasController.getAll);
 
 router.get(
-    "/tarefas/:id",
-    TarefasController.getOneValidation,
-    TarefasController.getOne,
+  '/tarefas/:id',
+  TarefasController.getOneValidation,
+  TarefasController.getOne,
 );
 
 router.post(
-    "/tarefas",
-    TarefasController.createValidation,
-    TarefasController.create,
+  '/tarefas',
+  TarefasController.createValidation,
+  TarefasController.create,
 );
 
 router.delete(
-    "/tarefas/:id",
-    TarefasController.deleteValidation,
-    TarefasController.Delete,
+  '/tarefas/:id',
+  TarefasController.deleteValidation,
+  TarefasController.Delete,
 );
 
 router.put(
-    "/tarefas/:id",
-    TarefasController.updateValidation,
-    TarefasController.update,
+  '/tarefas/:id',
+  TarefasController.updateValidation,
+  TarefasController.update,
 );
 
 export { router };
