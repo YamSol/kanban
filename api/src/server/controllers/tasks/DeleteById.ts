@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { StatusCodes } from 'http-status-codes';
 
 interface IParamProps {
-  id: number;
+  id?: number;
 }
 export const deleteByIdValidation = validation((getSchema) => ({
   params: getSchema<IParamProps>(

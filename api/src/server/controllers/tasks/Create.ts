@@ -1,16 +1,12 @@
 import { RequestHandler } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../shared/middleware';
+import { ITask } from '../../database/models';
 import { StatusCodes } from 'http-status-codes';
 
-interface ITask {
-  id: number;
-  type: number;
-  title: string;
-  createdAt: Date;
-}
+interface IBodyProps extends ITask {}
 export const createValidation = validation((getSchema) => ({
-  body: getSchema<ITask>(
+  body: getSchema<IBodyProps>(
     yup.object().shape({
       id: yup.number().integer().required(),
       type: yup.number().integer().required(),

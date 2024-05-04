@@ -4,12 +4,12 @@ import { validation } from '../../shared/middleware';
 import { StatusCodes } from 'http-status-codes';
 
 interface IParamProps {
-  id: number;
+  id?: number;
 }
 export const getByIdValidation = validation((getSchema) => ({
   params: getSchema<IParamProps>(
     yup.object().shape({
-      id: yup.number().integer().required(),
+      id: yup.number().integer().required().moreThan(-1),
     }),
   ),
 }));

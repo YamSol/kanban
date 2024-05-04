@@ -20,7 +20,7 @@ export const validation: TValidation =
 
     const errorsResult: Record<string, Record<string, string>> = {};
 
-    Object.entries(schemas).forEach(([key, schema]) => {
+    Object.entries(schemas).forEach(([key, schema]) => {   
       try {
         schema.validateSync(req[key as TProperty], {
           abortEarly: false,
@@ -36,6 +36,10 @@ export const validation: TValidation =
 
         errorsResult[key] = errors;
       }
+
+      if (key === 'body' && Object.keys(req.body).length === 0) {
+        errorsResult['body'] = { 'body': 'At least one Body property is required' }
+      };
     });
 
     if (Object.entries(errorsResult).length == 0) {
