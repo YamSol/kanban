@@ -6,12 +6,12 @@ export async function up(knex: Knex) {
     table.increments('id').primary();
     table.string('title').notNullable();
     table
-      .enum('type', [['To Do', 'In Progress', 'Under review', 'Complete']])
+      .enum('type', ['To Do', 'In Progress', 'Under review', 'Complete'])
       .notNullable();
     table.timestamp('createdAt').defaultTo(knex.fn.now());
+    // table.timestamp('updatedAt').defaultTo(knex.fn.now());
     // table.string('description').notNullable();
     // table.boolean('completed').notNullable().defaultTo(false);
-    // table.timestamp('updatedAt').defaultTo(knex.fn.now());
   }).then(() => console.log(`Table ${ETableNames.tasks} created`));
   ;
 }

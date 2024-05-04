@@ -4,3 +4,7 @@ export interface ITask {
   title: string;
   createdAt: Date;
 }
+
+export interface ITaskTypeAsString extends Omit<ITask, 'type'> {
+  type: string;
+}

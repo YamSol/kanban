@@ -1,6 +1,8 @@
 import { RequestHandler } from 'express';
-import * as tarefas from '../../../../data/tarefas.json';
+import { TasksProvider } from '../../database/providers/tasks';
+// import * as tarefas from '../../../../data/tarefas.json';
 
 export const getAll: RequestHandler = (req, res) => {
-  return res.json(tarefas);
+  const response = TasksProvider.getAll();
+  return res.json(response);
 };
