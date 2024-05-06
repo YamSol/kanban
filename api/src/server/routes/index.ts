@@ -4,10 +4,10 @@ import { TasksController } from '../controllers/tasks';
 
 const router = Router();
 
-router.get('/tarefas', TasksController.getAll);
-router.get('/tarefas/:id', TasksController.getByIdValidation, TasksController.getById);
-router.post('/tarefas', TasksController.createValidation, TasksController.create);
-router.delete('/tarefas/:id', TasksController.deleteById, TasksController.deleteByIdValidation);
-router.put('/tarefas/:id', TasksController.updateByIdValidation, TasksController.updateById);
+router.get('/tasks', TasksController.getAll);
+router.get('/tasks/:id', TasksController.getByIdValidation, TasksController.getById);
+router.post('/tasks', TasksController.createValidation, TasksController.create);
+router.delete('/tasks/:id', TasksController.deleteById, TasksController.deleteByIdValidation);
+router.put('/tasks/:id', TasksController.updateByIdValidation, TasksController.updateById);
 
 export { router };
