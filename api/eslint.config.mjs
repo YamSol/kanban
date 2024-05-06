@@ -1,5 +1,4 @@
 import globals from 'globals';
-
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { FlatCompat } from '@eslint/eslintrc';
@@ -13,7 +12,4 @@ const compat = new FlatCompat({
   recommendedConfig: pluginJs.configs.recommended,
 });
 
-export default [
-  { languageOptions: { globals: globals.node } },
-  ...compat.extends('standard-with-typescript'),
-];
+export default [{ languageOptions: { globals: globals.node } }, ...compat.extends('standard-with-typescript')];
