@@ -47,7 +47,7 @@ const CardItem = ({ data, index }) => {
         </div>
       )}
     </Draggable>
-  ), [data, index]); // useMemo é dependente dos valores data e index.
+  ), [data, index]); 
 };
 
 export default CardItem; 
