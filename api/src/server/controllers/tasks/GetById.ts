@@ -2,6 +2,7 @@ import { RequestHandler } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../shared/middleware';
 import { StatusCodes } from 'http-status-codes';
+import { TasksProvider } from '../../database/providers/tasks';
 
 interface IParamProps {
   id?: number;
@@ -14,14 +15,14 @@ export const getByIdValidation = validation((getSchema) => ({
   ),
 }));
 
-export const getById: RequestHandler = (req, res) => {
-  var tarefas = require('../../../../data/tarefas.json');
-  const search_id = parseInt(req.params.id);
+export const getById: RequestHandler = async (req, res) => {
+  // get task
+  const response = await TasksProvider.getById(parseInt(req.params.id));
 
-  const task = tarefas.find((tarefa: any) => tarefa.id === search_id);
-  if (task) {
-    return res.json(task);
+  // handle response
+  if (response) {
+    return res.status(StatusCodes.ACCEPTED).json(response);
+  } else {
+    return res.status(StatusCodes.NOT_FOUND).json({});
   }
-
-  return res.status(StatusCodes.NOT_FOUND).json({});
 };
