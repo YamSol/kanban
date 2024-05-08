@@ -48,7 +48,7 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3333/tarefas');
+        const response = await axios.get('por o caminho');
         console.log('Resposta da API:', response.data); 
 
         // Filtra os valores do objeto de resposta para obter arrays de itens
@@ -104,7 +104,7 @@ export default function Home() {
 
     fetchData(); // Chama a função para buscar os dados da API
   }, []);
-
+  
   // Efeito para atualizar o estado "ready" quando o componente é montado
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -131,35 +131,70 @@ export default function Home() {
   };
 
   // Função chamada quando uma tecla é pressionada no campo de texto
-  const onTextAreaKeyPress = (e) => {
+  const onTextAreaKeyPress = async (e) => {
     if (e.keyCode === 13) {
       const val = e.target.value;
       if (val.length === 0) {
         setShowForm(false);
-      }
-      else {
+      } else {
         const boardId = e.target.attributes['data-id'].value;
         const item = {
           id: createGuidId(),
           title: val,
           createdAt: new Date().toISOString()
+        };
+        
+        // Adiciona a tarefa ao quadro na interface do usuário
+        setBoardData(prevState => {
+          const newState = [...prevState];
+          newState[boardId].items.push(item);
+          return newState;
+        });
+  
+        // Se a API estiver disponível, cria a tarefa no banco de dados
+        if (typeof window !== 'undefined') {
+          try {
+            const response = await axios.post('/api/tasks', { title: val, boardId });
+            const newTask = response.data;
+            console.log('Tarefa criada no banco de dados:', newTask);
+          } catch (error) {
+            console.error('Erro ao criar tarefa:', error);
+          }
         }
-        let newBoardData = boardData;
-        newBoardData[boardId].items.push(item);
-        setBoardData(newBoardData);
+  
         setShowForm(false);
         e.target.value = '';
       }
     }
-  }
+  };
 
-  // Função para remover uma tarefa do quadro
-  const removeTask = (boardIndex, taskIndex) => {
+// Função para remover uma tarefa do quadro e da API
+const removeTask = async (boardIndex, taskIndex) => {
+  try {
+    // Remover a tarefa do banco de dados (se a API estiver disponível)
+    if (typeof window !== 'undefined') {
+      const taskId = boardData[boardIndex].items[taskIndex].id;
+      await axios.delete(`/api/tasks/${taskId}`);
+      console.log('Tarefa removida do banco de dados com sucesso.');
+    }
+
+    // Remover a tarefa do quadro na interface do usuário
     let newBoardData = [...boardData];
     newBoardData[boardIndex].items.splice(taskIndex, 1);
     setBoardData(newBoardData);
     setShowRemoveForm(false);
-  };
+  } catch (error) {
+    console.error('Erro ao remover tarefa:', error);
+    
+    // remover a tarefa do quadro na interface do usuário mesmo sem a API ligada
+    let newBoardData = [...boardData];
+    newBoardData[boardIndex].items.splice(taskIndex, 1);
+    setBoardData(newBoardData);
+    setShowRemoveForm(false);
+  }
+};
+
+
 
   // Função para abrir o formulário de edição de tarefa
   const openEditForm = (boardIndex, taskIndex) => {
@@ -169,12 +204,27 @@ export default function Home() {
   };
 
   // Função para editar uma tarefa do quadro
-  const editTask = (boardIndex, taskIndex, newValue) => {
+const editTask = async (boardIndex, taskIndex, newValue) => {
+  try {
+    // Atualiza o título da tarefa no estado do quadro
     let newBoardData = [...boardData];
     newBoardData[boardIndex].items[taskIndex].title = newValue;
     setBoardData(newBoardData);
+
+    // Obtém o ID da tarefa que está sendo editada
+    const taskId = newBoardData[boardIndex].items[taskIndex].id;
+
+    // Atualiza a tarefa no banco de dados
+    await axios.put(`/api/tasks/${taskId}`, { title: newValue });
+    console.log('Tarefa atualizada no banco de dados com sucesso.');
+  } catch (error) {
+    console.error('Erro ao atualizar tarefa:', error);
+  } finally {
+    // Fecha o formulário de edição após a conclusão (sucesso ou falha)
     setShowEditForm(false);
-  };
+  }
+};
+
 
   // Retorna o JSX para renderizar a página
   return (
