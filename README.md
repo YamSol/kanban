@@ -1,24 +1,46 @@
-# Kanban
+# Kanban Board Project
 
-## Api
+This is a Kanban board project developed with Next.js for the frontend, TypeScript for the backend API, and MySQL as the database.
 
-### Uso
-```bash
-npm install
-npm start
+## Overview
+
+Kanban is a visual management methodology that helps teams visualize work, identify bottlenecks, and optimize workflow. This project implements a digital Kanban board, allowing users to create and manage tasks in different columns such as "To Do," "In Progress," and "Completed."
+
+## Prerequisites
+
+- Node.js
+- Yarn (or npm)
+- Docker
+
+## Installation and Execution
+
+```sh
+# 1. Clone this repository.
+git clone https://github.com/YamSol/kanban.git
+# 2. start backend (api + database).
+cd api && docker-compose build && docker-compose up -d
+# 3. Install dependencies & run frontend.
+cd ../frontend && yarn install && yarn dev
 ```
 
-### Banco de dados
+## About
 
-```sql
-create table tasks( 
-    id int NOT NULL, 
-    title VARCHAR(255) NOT NULL, 
-    createdAt date,
-    type enum('A fazer','Em Progresso','Em revisão','Completo')
-);
-```
+Key features of this project include **creation**, **editing**, and **deletion** of task cards, along with the ability to move cards between board columns and visualize real-time task progress. The project utilizes the following technologies:
 
-```sql
-INSERT INTO tasks (id,title,createdAt,type) VALUES (2,'Criar tarefa','23-04-15',0)
-```
+- **Frontend:** 
+  - React
+  - Next.js
+  - Axios
+- **Backend:** 
+  - TypeScript
+  - Express
+  - Knex
+- **Database:** MySQL
+
+## Contribution
+
+Contributions are welcome! Feel free to open issues and submit pull requests with improvements or fixes.
+
+## License
+
+This project is licensed under the [GPL-3 License](LICENSE).
