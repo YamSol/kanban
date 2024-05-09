@@ -105,13 +105,31 @@ export default function Home() {
   }, []);
 
   // Função chamada quando um item é arrastado e solto
-  const onDragEnd = (re) => {
-    if (!re.destination) return;
-    let newBoardData = boardData;
-    var dragItem = newBoardData[parseInt(re.source.droppableId)].items[re.source.index];
-    newBoardData[parseInt(re.source.droppableId)].items.splice(re.source.index, 1);
-    newBoardData[parseInt(re.destination.droppableId)].items.splice(re.destination.index, 0, dragItem);
+  const onDragEnd = async (result) => {
+    if (!result.destination) return;
+
+    // Cria uma cópia dos dados do quadro
+    const newBoardData = [...boardData];
+    // Obtém o ID do item arrastado
+    const draggedItemId = newBoardData[result.source.droppableId].items[result.source.index].id;
+
+    // Reorganize os dados do quadro na memória
+    const dragItem = newBoardData[result.source.droppableId].items.splice(result.source.index, 1)[0];
+    newBoardData[result.destination.droppableId].items.splice(result.destination.index, 0, dragItem);
+    
+    // Atualiza o estado do quadro com os novos dados
     setBoardData(newBoardData);
+
+    try {
+      // Envie uma solicitação para atualizar o banco de dados com as informações atualizadas
+      await axios.put(`http://localhost:3333/tasks/${draggedItemId}`, {
+        type: result.destination.droppableId, // Nova posição da coluna
+      });
+
+      console.log("Item movido com sucesso no banco de dados.");
+    } catch (error) {
+      console.error("Erro ao mover item no banco de dados:", error);
+    }
   };
 
   // Função chamada quando uma tecla é pressionada no campo de texto
