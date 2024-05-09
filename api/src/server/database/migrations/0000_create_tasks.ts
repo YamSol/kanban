@@ -1,15 +1,8 @@
 import type { Knex } from 'knex';
 import { ETableNames } from '../ETableNames';
-import knex from 'knex';
-import { production } from '../knex/Environment';
-
-export const config = knex(production);
-
-console.log('8888888888888888888888');
-console.log(knex);
 
 export async function up(knex: Knex) {
-  
+  // Create table
   return knex.schema
     .createTable(ETableNames.tasks, (table) => {
       table.increments('id').primary();
