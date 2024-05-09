@@ -3,9 +3,8 @@
 @tailwind utilities;
 
 @layer base {
-    * {
+  * {
     scrollbar-width: thin;
     scrollbar-color: rgb(186, 186, 207) rgb(243, 240, 234);
-    }
-
+  }
 }

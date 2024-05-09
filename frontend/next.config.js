@@ -1,7 +1,7 @@
 const nextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ['randomuser.me'],
+    domains: ["randomuser.me"],
   },
 };
 
