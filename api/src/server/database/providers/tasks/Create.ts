@@ -1,8 +1,8 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
-import { ITaskTypeAsString } from '../../models';
+import { ITask } from '../../models';
 
-export const create = async (task: ITaskTypeAsString): Promise<number | Error> => {
+export const create = async (task: ITask): Promise<number | Error> => {
   try {
     // insert task into database and return it id
     const [response] = await Knex(ETableNames.tasks).insert(task).returning('id');

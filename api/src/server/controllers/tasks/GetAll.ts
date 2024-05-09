@@ -1,11 +1,11 @@
 import { RequestHandler } from 'express';
 import { TasksProvider } from '../../database/providers/tasks';
-import { ITaskTypeAsString } from '../../database/models';
+import { ITask } from '../../database/models';
 import { StatusCodes } from 'http-status-codes';
 
 export const getAll: RequestHandler = async (req, res) => {
   // get all tasks
-  const response: ITaskTypeAsString[] | Error = await TasksProvider.getAll();
+  const response: ITask[] | Error = await TasksProvider.getAll();
 
   // error handling
   if (response instanceof Error) {

@@ -3,7 +3,6 @@ import { RequestHandler } from 'express';
 import { validation } from '../../shared/middleware';
 import { StatusCodes } from 'http-status-codes';
 import { TasksProvider } from '../../database/providers/tasks';
-import { convertTypeToString } from '../../shared/services';
 
 interface IBodyProps {
   title?: string;
@@ -30,19 +29,10 @@ export const updateByIdValidation = validation((getSchema) => ({
   ),
 }));
 
-interface IBodyPropsTypeAsString {
-  title?: string;
-  createdAt?: Date;
-  id?: number;
-  type?: string;
-}
 export const updateById: RequestHandler = async (req, res) => {
   // get params
   const id = parseInt(req.params.id);
-  var task: IBodyPropsTypeAsString = req.body;
-  if (task.type) { // if has a type
-    task.type = convertTypeToString(req.body.type);
-  }
+  const task = req.body;
 
   // update task
   const response = await TasksProvider.updateById(task, id)
@@ -54,7 +44,7 @@ export const updateById: RequestHandler = async (req, res) => {
 
   // handle response
   if (response === 1) {
-    return res.status(StatusCodes.NO_CONTENT).send();Error
+    return res.status(StatusCodes.NO_CONTENT).send();
   } else {
     return res.status(StatusCodes.BAD_REQUEST).json({errors: {default: 'This task doesn\'t exist'}});
   }

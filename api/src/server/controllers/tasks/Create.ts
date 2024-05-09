@@ -1,10 +1,9 @@
 import { RequestHandler } from 'express';
 import * as yup from 'yup';
 import { validation } from '../../shared/middleware';
-import { ITask, ITaskTypeAsString } from '../../database/models';
+import { ITask } from '../../database/models';
 import { StatusCodes } from 'http-status-codes';
 import { TasksProvider } from '../../database/providers/tasks';
-import { convertTypeToString } from '../../shared/services';
 
 interface IBodyProps extends ITask {}
 export const createValidation = validation((getSchema) => ({
@@ -19,11 +18,8 @@ export const createValidation = validation((getSchema) => ({
 }));
 
 export const create: RequestHandler = async (req, res) => {
-  // convert type to string
-  var task: ITaskTypeAsString = req.body;
-  task.type = convertTypeToString(req.body.type);
-  
   // create task
+  var task: ITask = req.body;
   var result: number | Error = await TasksProvider.create(task);
 
   // error handling

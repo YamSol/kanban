@@ -1,1 +1,1 @@
-export * from './ConvertTypeToString';
+export {};

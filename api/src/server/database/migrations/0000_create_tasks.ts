@@ -6,7 +6,7 @@ export async function up(knex: Knex) {
     .createTable(ETableNames.tasks, (table) => {
       table.increments('id').primary();
       table.string('title').notNullable();
-      table.enum('type', ['To Do', 'In Progress', 'Under review', 'Complete']).notNullable();
+      table.integer('type').notNullable();
       table.timestamp('createdAt').defaultTo(knex.fn.now());
       // table.timestamp('updatedAt').defaultTo(knex.fn.now());
       // table.string('description').notNullable();

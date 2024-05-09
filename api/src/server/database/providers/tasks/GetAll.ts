@@ -1,8 +1,8 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
-import { ITaskTypeAsString } from '../../models';
+import { ITask } from '../../models';
 
-export const getAll = async (): Promise<ITaskTypeAsString[] | Error> => {
+export const getAll = async (): Promise<ITask[] | Error> => {
   try {
     // get all tasks
     const result = await Knex(ETableNames.tasks).select();
