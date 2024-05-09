@@ -17,10 +17,10 @@ Kanban is a visual management methodology that helps teams visualize work, ident
 ```sh
 # 1. Clone this repository.
 git clone https://github.com/YamSol/kanban.git
-# 2. start backend (api + database).
-cd api && docker-compose build && docker-compose up -d
-# 3. Install dependencies & run frontend.
-cd ../frontend && yarn install && yarn dev
+# 2. start backend (api + frontend + database).
+make build
+# 3. Run software
+make run
 ```
 
 ## About
