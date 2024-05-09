@@ -3,19 +3,24 @@ services:
     build: api
     ports:
       - "3333:3333"
+    volumes:
+      - ./api:/app
   frontend:
     build: frontend
     ports:
       - "3000:3000"
+    volumes:
+      - ./frontend:/app
   db:
     image: mysql:8.4.0
     cap_add:
       - SYS_NICE
     restart: always
-    env_file:
-      - path: api/.env
-    # enviroment:
-    #   - 
+    environment: 
+      - MYSQL_DATABASE=tasks
+      - MYSQL_USER=root
+      - MYSQL_HOST=localhost
+      - MYSQL_ROOT_PASSWORD=123456
     ports: 
       - "3306:3306"
     volumes:

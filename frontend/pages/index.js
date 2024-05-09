@@ -1,10 +1,10 @@
 import axios from 'axios';
-import Layout from "../components/Layout"; 
+import Layout from "../components/Layout";
 import { ChevronDownIcon, PlusCircleIcon, XCircleIcon, DotsVerticalIcon, PencilIcon } from "@heroicons/react/outline";
-import CardItem from "../components/CardItem"; 
-import { DragDropContext, Droppable } from "react-beautiful-dnd"; 
-import { useEffect, useState } from "react"; 
-import { useWindowSize } from '@react-hook/window-size'; 
+import CardItem from "../components/CardItem";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import { useEffect, useState } from "react";
+import { useWindowSize } from '@react-hook/window-size';
 
 // Função para gerar IDs únicos
 function createGuidId() {
@@ -21,6 +21,7 @@ export default function Home() {
   const [selectedBoard, setSelectedBoard] = useState(0);
   const [showRemoveForm, setShowRemoveForm] = useState(false);
   const [selectedRemoveBoard, setSelectedRemoveBoard] = useState(0);
+  const [selectedRemoveItem, setSelectedRemoveItem] = useState(0);
   const [showEditForm, setShowEditForm] = useState(false);
   const [selectedEditBoard, setSelectedEditBoard] = useState(0);
   const [selectedTaskIndex, setSelectedTaskIndex] = useState(0);
@@ -48,8 +49,8 @@ export default function Home() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('por o caminho');
-        console.log('Resposta da API:', response.data); 
+        const response = await axios.get('http://localhost:3333/tasks');
+        console.log('Resposta da API:', response.data);
 
         // Filtra os valores do objeto de resposta para obter arrays de itens
         const dataValues = Object.values(response.data).filter(item => Array.isArray(item));
@@ -88,23 +89,23 @@ export default function Home() {
         // Formata os dados finais para o quadro
         const finalData = Object.values(mappedData).map((items, index) => ({
           name: index === 0 ? "A fazer" :
-                index === 1 ? "Em progresso" :
-                index === 2 ? "Em revisão" :
+            index === 1 ? "Em progresso" :
+              index === 2 ? "Em revisão" :
                 index === 3 ? "Completos" :
-                "Desconhecido",
+                  "Desconhecido",
           items
         }));
 
         // Define os dados formatados no estado do quadro
         setBoardData(finalData);
       } catch (error) {
-        console.error('Erro ao buscar dados da API:', error); 
+        console.error('Erro ao buscar dados da API:', error);
       }
     };
 
     fetchData(); // Chama a função para buscar os dados da API
   }, []);
-  
+
   // Efeito para atualizar o estado "ready" quando o componente é montado
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -138,61 +139,53 @@ export default function Home() {
         setShowForm(false);
       } else {
         const boardId = e.target.attributes['data-id'].value;
-        const item = {
-          id: createGuidId(),
-          title: val,
-          createdAt: new Date().toISOString()
-        };
-        
-        // Adiciona a tarefa ao quadro na interface do usuário
-        setBoardData(prevState => {
-          const newState = [...prevState];
-          newState[boardId].items.push(item);
-          return newState;
-        });
-  
+
+
         // Se a API estiver disponível, cria a tarefa no banco de dados
         if (typeof window !== 'undefined') {
           try {
-            const response = await axios.post('/api/tasks', { title: val, boardId });
+            const response = await axios.post('http://localhost:3333/tasks', { title: val, type: boardId });
             const newTask = response.data;
+
+            // Adiciona a tarefa ao quadro na interface do usuário
+            setBoardData(prevState => {
+              const newState = [...prevState];
+              newState[boardId].items.push(newTask);
+              return newState;
+            });
+
             console.log('Tarefa criada no banco de dados:', newTask);
           } catch (error) {
             console.error('Erro ao criar tarefa:', error);
           }
         }
-  
+
         setShowForm(false);
         e.target.value = '';
       }
     }
   };
 
-// Função para remover uma tarefa do quadro e da API
-const removeTask = async (boardIndex, taskIndex) => {
-  try {
-    // Remover a tarefa do banco de dados (se a API estiver disponível)
-    if (typeof window !== 'undefined') {
+  // Função para remover uma tarefa do quadro e da API
+  const removeTask = async (boardIndex, taskIndex) => {
+    try {
+      // Remover a tarefa do banco de dados (se a API estiver disponível)
+      console.log(taskIndex);
+      console.log(boardData[boardIndex].items);
       const taskId = boardData[boardIndex].items[taskIndex].id;
-      await axios.delete(`/api/tasks/${taskId}`);
+      await axios.delete(`http://localhost:3333/tasks/${taskId}`);
       console.log('Tarefa removida do banco de dados com sucesso.');
-    }
 
+      let newBoardData = [...boardData];
+      newBoardData[boardIndex].items.splice(taskIndex, 1);
+      setBoardData(newBoardData);
+      setShowRemoveForm(false);
+    } catch (error) {
+      console.error('Erro ao remover tarefa:', error);
+    }
     // Remover a tarefa do quadro na interface do usuário
-    let newBoardData = [...boardData];
-    newBoardData[boardIndex].items.splice(taskIndex, 1);
-    setBoardData(newBoardData);
-    setShowRemoveForm(false);
-  } catch (error) {
-    console.error('Erro ao remover tarefa:', error);
     
-    // remover a tarefa do quadro na interface do usuário mesmo sem a API ligada
-    let newBoardData = [...boardData];
-    newBoardData[boardIndex].items.splice(taskIndex, 1);
-    setBoardData(newBoardData);
-    setShowRemoveForm(false);
-  }
-};
+  };
 
 
 
@@ -204,26 +197,25 @@ const removeTask = async (boardIndex, taskIndex) => {
   };
 
   // Função para editar uma tarefa do quadro
-const editTask = async (boardIndex, taskIndex, newValue) => {
-  try {
-    // Atualiza o título da tarefa no estado do quadro
-    let newBoardData = [...boardData];
-    newBoardData[boardIndex].items[taskIndex].title = newValue;
-    setBoardData(newBoardData);
+  const editTask = async (boardIndex, taskIndex, newTitle) => {
+    try {
+      // Atualiza o título da tarefa no estado do quadro
+      let newBoardData = [...boardData];
+      newBoardData[boardIndex].items[taskIndex].title = newTitle;
+      setBoardData(newBoardData);
 
-    // Obtém o ID da tarefa que está sendo editada
-    const taskId = newBoardData[boardIndex].items[taskIndex].id;
+      // Obtém o ID da tarefa que está sendo editada
+      const taskId = newBoardData[boardIndex].items[taskIndex].id;
 
-    // Atualiza a tarefa no banco de dados
-    await axios.put(`/api/tasks/${taskId}`, { title: newValue });
-    console.log('Tarefa atualizada no banco de dados com sucesso.');
-  } catch (error) {
-    console.error('Erro ao atualizar tarefa:', error);
-  } finally {
+      // Atualiza a tarefa no banco de dados
+      await axios.put(`http://localhost:3333/tasks/${taskId}`, { title: newTitle });
+      console.log('Tarefa atualizada no banco de dados com sucesso.');
+    } catch (error) {
+      console.error('Erro ao atualizar tarefa:', error);
+    }
     // Fecha o formulário de edição após a conclusão (sucesso ou falha)
     setShowEditForm(false);
-  }
-};
+  };
 
 
   // Retorna o JSX para renderizar a página
@@ -263,6 +255,7 @@ const editTask = async (boardIndex, taskIndex, newValue) => {
                                         <button className="text-red-500 mr-2" onClick={() => {
                                           setShowRemoveForm(true);
                                           setSelectedRemoveBoard(bIndex);
+                                          setSelectedRemoveItem(iIndex);
                                         }}>
                                           <XCircleIcon className="w-5 h-5" />
                                         </button>
@@ -306,7 +299,7 @@ const editTask = async (boardIndex, taskIndex, newValue) => {
           <div className="bg-white p-5 rounded-md shadow-md">
             <p>Tem certeza de que deseja remover esta tarefa?</p>
             <div className="flex justify-end mt-3">
-              <button className="px-4 py-2 bg-red-500 text-white rounded-md mr-3" onClick={() => { removeTask(selectedRemoveBoard); }}>
+              <button className="px-4 py-2 bg-red-500 text-white rounded-md mr-3" onClick={() => { removeTask(selectedRemoveBoard, selectedRemoveItem); }}>
                 Remover
               </button>
               <button className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md" onClick={() => setShowRemoveForm(false)}>

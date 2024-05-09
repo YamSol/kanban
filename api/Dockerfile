@@ -1,7 +1,8 @@
 FROM node:21.5.0
 
-WORKDIR .
-COPY . .
+RUN mkdir -p /app
+WORKDIR /app
+COPY . /app
 RUN yarn install
 
 COPY entrypoint.sh /usr/bin

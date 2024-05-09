@@ -26,7 +26,7 @@ export const create: RequestHandler = async (req, res) => {
   }
 
   // get task from database
-  const taskInDatabase = await TasksProvider.getById(task.id);
+  const taskInDatabase = await TasksProvider.getById(result);
 
   // error handling
   if (taskInDatabase instanceof Error) {
