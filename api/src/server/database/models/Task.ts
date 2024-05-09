@@ -4,3 +4,8 @@ export interface ITask {
   title: string;
   createdAt: Date;
 }
+
+export interface ITaskCreate {
+  type: number;
+  title: string;
+}
